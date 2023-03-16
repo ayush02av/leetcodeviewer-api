@@ -20,7 +20,11 @@ def profile(username):
     else:
         message = "Details fetched"
 
-        details['matchedUser']['rating'] = details['userContestRanking']['rating']
+        try:
+            details['matchedUser']['rating'] = details['userContestRanking']['rating']
+        except:
+            details['matchedUser']['rating'] = 0
+            
         details = details['matchedUser']
         
         df = generate.generate_df(details)
