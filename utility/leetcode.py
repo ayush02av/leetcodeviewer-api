@@ -4,6 +4,9 @@ def get_leetcode_details_from_username(username):
     url = "https://leetcode.com/graphql/"
     body = """
     {
+        userContestRanking(username: "%s"){
+            rating
+        }
         matchedUser(username: "%s") {
             username
             githubUrl
@@ -48,12 +51,12 @@ def get_leetcode_details_from_username(username):
                 }
             }
     }
-    """ % (username)
-    
+    """ % (username, username)
+
     response = requests.post(url=url, json={"query": body})
 
     if response.status_code == 200:
         if 'errors' not in response.json().keys():
-            return response.json()['data']['matchedUser']
+            return response.json()['data']
             
     return None

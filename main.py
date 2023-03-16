@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
-from utility import leetcode
+from utility import leetcode, generate, analyse
 
 app = Flask(__name__)
 CORS(app)
@@ -19,6 +19,19 @@ def profile(username):
         message = "Couldn't fetch details"
     else:
         message = "Details fetched"
+
+        details['matchedUser']['rating'] = details['userContestRanking']['rating']
+        details = details['matchedUser']
+        
+        df = generate.generate_df(details)
+        analysis = analyse.analyse(df)
+
+        details = {
+            'profile': details['profile'],
+            'rating': details['rating'],
+            'problems': df['problems'][0],
+            'analysis': analysis
+        }
     
     response = {
         'message': message,
